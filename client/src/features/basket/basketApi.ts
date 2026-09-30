@@ -82,7 +82,8 @@ export const basketApi = createApi({
             onQueryStarted: async (_, { dispatch }) => {
                 dispatch(
                     basketApi.util.updateQueryData('fetchBasket', undefined, (draft) => {
-                        draft.items = []
+                        draft.items = [];
+                        draft.basketId = '';
                     })
                 );
                 Cookies.remove('basketId');
@@ -93,4 +94,4 @@ export const basketApi = createApi({
 
 
 export const { useFetchBasketQuery, useAddBasketItemMutation,
-     useRemoveBasketItemMutation , useClearBasketMutation} = basketApi;
+    useRemoveBasketItemMutation, useClearBasketMutation } = basketApi;
