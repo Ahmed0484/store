@@ -5,17 +5,17 @@ import { router } from "../routes/Routes";
 
 const customBaseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
-    credentials:'include'
+    credentials: 'include'
 });
 
-type ErrorResponse = | string | {title: string} | {errors: string[]};
+type ErrorResponse = | string | { title: string } | { errors: string[] };
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
-export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: BaseQueryApi, 
+export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: BaseQueryApi,
     extraOptions: object) => {
     api.dispatch(startLoading());
-    await sleep();
+    if (import.meta.env.DEV) await sleep();
     const result = await customBaseQuery(args, api, extraOptions);
     api.dispatch(stopLoading());
     if (result.error) {
@@ -45,7 +45,7 @@ export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: 
                 break;
             case 500:
                 if (typeof responseData === 'object')
-                    router.navigate('/server-error', {state: {error: responseData}})
+                    router.navigate('/server-error', { state: { error: responseData } })
                 break;
             default:
                 break;
