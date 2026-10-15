@@ -1,7 +1,7 @@
-import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Divider, Fade} from "@mui/material";
+import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Divider, Fade } from "@mui/material";
 import { useState } from "react";
 import type { User } from "../models/user";
-import { History, Logout, Person } from "@mui/icons-material";
+import { History, Inventory, Logout, Person } from "@mui/icons-material";
 import { useLogoutMutation } from "../../features/account/accountApi";
 import { Link } from "react-router-dom";
 
@@ -13,8 +13,10 @@ export default function UserMenu({ user }: Props) {
     const [logout] = useLogoutMutation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
+
     };
     const handleClose = () => {
         setAnchorEl(null);
@@ -44,18 +46,26 @@ export default function UserMenu({ user }: Props) {
                     transition: Fade,
                 }}
             >
-                <MenuItem>
+                <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Person />
                     </ListItemIcon>
                     <ListItemText>My profile</ListItemText>
                 </MenuItem>
-                <MenuItem component={Link} to='/orders'>
+                <MenuItem onClick={handleClose} component={Link} to='/orders'>
                     <ListItemIcon>
                         <History />
                     </ListItemIcon>
                     <ListItemText>My orders</ListItemText>
                 </MenuItem>
+                {user.roles.includes('Admin') &&
+                    <MenuItem onClick={handleClose} component={Link} to='/inventory'>
+                        <ListItemIcon>
+                            <Inventory />
+                        </ListItemIcon>
+                        <ListItemText>Inventory</ListItemText>
+                    </MenuItem>
+                }
                 <Divider />
                 <MenuItem onClick={logout}>
                     <ListItemIcon>

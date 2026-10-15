@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.RequestHelper;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,12 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
     .AddEntityFrameworkStores<StoreContext>();
 
 builder.Services.AddScoped<PaymentsService>();
-
+builder.Services.AddAutoMapper(cfg => 
+{
+    cfg.AddMaps(typeof(Program).Assembly); // Scans the assembly where 'Program' is defined
+});
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<ImageService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
